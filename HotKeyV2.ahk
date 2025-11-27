@@ -20,16 +20,6 @@ ClipStrReplace(search, replace) {
     return
 }
 
-ClipSend(text, sleepTime) {
-    ClipSaved := ClipboardAll()
-    A_Clipboard := text
-    ClipWait()
-    Sleep(sleepTime)
-    Send(text)
-    A_Clipboard := ClipSaved
-    ClipSaved := ""
-}
-
 ; **************************************
 ; 截圖相關
 ; **************************************
@@ -89,36 +79,33 @@ ClipSend(text, sleepTime) {
 }
 
 ^F5:: {
-    searchTxt := InputBox("Search:", "Search").Value
-    if Trim(searchTxt) != "" {
-        Run('E:\Software\bin\Pin4Key\bin\GrepString.bat ' searchTxt)
+    result := InputBox("Search:", "Search")
+    if (result.Result = "OK" && Trim(result.Value) != "") {
+        Run('E:\Software\bin\Pin4Key\bin\GrepString.bat ' result.Value)
     }
 }
 
 ^F6:: {
     SetTitleMatchMode(2)
     if WinActive("SQL Server Management Studio") {
-        Send("{Shift}")  ; 切換到英文輸入法
         Sleep(100)
-        ClipSend("select top 100 * from DB_GEN..", 200)
+        SendText("select top 100 * from DB_GEN..")
     }
 }
 
 ^F7:: {
     SetTitleMatchMode(2)
     if WinActive("SQL Server Management Studio") {
-        Send("{Shift}")  ; 切換到英文輸入法
         Sleep(100)
-        ClipSend("select top 100 * from DB_ADM..", 200)
+        SendText("select top 100 * from DB_ADM..")
     }
 }
 
 ^F8:: {
     SetTitleMatchMode(2)
     if WinActive("SQL Server Management Studio") {
-        Send("{Shift}")  ; 切換到英文輸入法
         Sleep(100)
-        ClipSend("select top 100 * from DB_OPD..", 200)
+        SendText("select top 100 * from DB_OPD..")
     }
 }
 
@@ -157,8 +144,20 @@ ClipSend(text, sleepTime) {
 ^F11:: {
     SetTitleMatchMode(2)
     if WinActive("SQL Server Management Studio") {
-        fromTxt := InputBox("原本字串:", "Replace").Value
-        toTxt := InputBox("取代成:", "Replace").Value
-        ClipStrReplace(fromTxt, toTxt)
+        result1 := InputBox("原本字串:", "Replace")
+        if (result1.Result = "OK") {
+            result2 := InputBox("取代成:", "Replace")
+            if (result2.Result = "OK") {
+                ClipStrReplace(result1.Value, result2.Value)
+            }
+        }
     }
+}
+
+; 測試用：查看當前輸入法代碼
+^F12:: {
+    hwnd := WinExist("A")
+    threadId := DllCall("GetWindowThreadProcessId", "UInt", hwnd, "Ptr", 0, "UInt")
+    currentIME := DllCall("GetKeyboardLayout", "UInt", threadId, "UInt")
+    MsgBox("當前輸入法代碼：" Format("0x{:08X}", currentIME))
 }
