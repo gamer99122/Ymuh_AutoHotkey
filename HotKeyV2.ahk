@@ -1,4 +1,4 @@
-﻿; **************************************
+; **************************************
 ; 共用函式
 ; **************************************
 
@@ -88,6 +88,7 @@ ClipStrReplace(search, replace) {
 ^F6:: {
     SetTitleMatchMode(2)
     if WinActive("SQL Server Management Studio") {
+        Send("{Ctrl up}{Shift up}{Alt up}")
         Sleep(100)
         SendText("select top 100 * from DB_GEN..")
     }
@@ -96,6 +97,7 @@ ClipStrReplace(search, replace) {
 ^F7:: {
     SetTitleMatchMode(2)
     if WinActive("SQL Server Management Studio") {
+        Send("{Ctrl up}{Shift up}{Alt up}")
         Sleep(100)
         SendText("select top 100 * from DB_ADM..")
     }
@@ -104,6 +106,7 @@ ClipStrReplace(search, replace) {
 ^F8:: {
     SetTitleMatchMode(2)
     if WinActive("SQL Server Management Studio") {
+        Send("{Ctrl up}{Shift up}{Alt up}")
         Sleep(100)
         SendText("select top 100 * from DB_OPD..")
     }
